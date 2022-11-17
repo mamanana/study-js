@@ -1,0 +1,26 @@
+{
+  "name": "node-server-graphql",
+  "version": "1.0.0",
+  "description": "study graqhql for node js server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mamanana/node-server-graphql.git"
+  },
+  "author": "hung",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mamanana/node-server-graphql/issues"
+  },
+  "homepage": "https://github.com/mamanana/node-server-graphql#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-graphql": "^0.11.0",
+    "graphql": "^15.3.0",
+    "nodemon": "^2.0.20"
+  }
+}
