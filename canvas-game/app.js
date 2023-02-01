@@ -10,4 +10,12 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, '/index.html'));
 });
 
+app.get('/pacman', function(req, res) {
+    res.sendFile(path.join(__dirname, '/pacman.html'));
+});
+
+app.get('/pokemon', function(req, res) {
+    res.sendFile(path.join(__dirname, '/pokemon.html'));
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}!`));
