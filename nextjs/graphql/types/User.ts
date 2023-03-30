@@ -1,34 +1,54 @@
 import { builder } from "../builder";
+import prisma from "../../lib/prisma"
+
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
+const APP_SECRET = 'GraphQL-is-aw3some';
 
 builder.prismaObject("User", {
   fields: (t) => ({
     id: t.exposeID("id"),
     email: t.exposeString("email"),
-    name: t.exposeString('name'),
+    name: t.exposeString("name"),
     createdAt: t.expose("createdAt", {
-        type: "Date",
+      type: "Date",
     }),
   }),
 });
 
+const AuthPayload = builder.simpleObject("AuthPayload", {
+  fields: (t) => ({
+    token: t.string({
+      nullable: false,
+    }),
+    user: t.prismaField({
+      type: "User",
+    }),
+  }),
+});
 
+builder.mutationField("signup", (t) =>
+  t.field({
+    type: AuthPayload,
+    args: {
+      email: t.arg.string({ required: true }),
+      name: t.arg.string({ required: true }),
+      password: t.arg.string({ required: true }),
+    },
+    resolve: async (parent, args) => {
 
-builder.mutationField("signup", (t) => 
-    t.prismaField({
-        type: 'User',
-        args: {
-            email: t.arg.string({ required: true }),
-            name: t.arg.string({ required: true }),
-            password: t.arg.string({ required: true })
-        },
-        resolve: async (query, _parent, args, ctx) => {
-            console.log(args)
-            return {
-                id: 1,
-                ...args,
-                createdAt: '2023-01-01'
-            };
-        }
-    })
-)
+      const password = await bcrypt.hash(args.password, 10)
 
+      const user = await prisma.user.create({
+        data: { ...args, password },
+      });
+
+      const token = jwt.sign({ userId: user.id }, APP_SECRET);
+      // console.log(args)
+      return {
+        token,
+        user,
+      };
+    },
+  })
+);
