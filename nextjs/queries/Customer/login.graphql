@@ -1,0 +1,11 @@
+mutation customerLogin($email: String!, $passowrd: String!){
+  login(email: $email, password: $passowrd) {
+    token
+    user {
+      id
+      email
+      name
+      createdAt
+    }
+  }
+}

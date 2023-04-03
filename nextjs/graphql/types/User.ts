@@ -1,8 +1,8 @@
 import { builder } from "../builder";
 import prisma from "../../lib/prisma";
+import jwt from "jsonwebtoken"
+import bcrypt from 'bcryptjs'
 
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 const APP_SECRET = "GraphQL-is-aw3some";
 
 builder.prismaObject("User", {

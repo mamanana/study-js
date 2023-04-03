@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import jwt from "jsonwebtoken"
 
-const jwt = require("jsonwebtoken");
 const APP_SECRET = "GraphQL-is-aw3some";
 
-function getTokenPayload(token) {
+function getTokenPayload(token: string)  {
   return jwt.verify(token, APP_SECRET);
 }
 

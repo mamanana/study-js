@@ -6,8 +6,13 @@ import {
 } from "@apollo/client";
 
 // 2
+const origin = typeof window !== 'undefined' ? window.location.origin : process.env.BASE_URL
+
+const apiBase = new URL('/api/graphql', origin).toString();
+
 const httpLink = createHttpLink({
-  uri: "http://localhost:3000/api/graphql",
+  useGETForQueries: true,
+  uri: apiBase
 });
 
 // 3

@@ -1,6 +1,11 @@
 import React from "react";
+import { Form, Input } from 'informed';
+import { useLogin } from "@/talons/Customer/useLogin";
 
 const Login = () => {
+
+  const talonProps = useLogin()
+
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-lg">
@@ -11,8 +16,7 @@ const Login = () => {
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati
           sunt dolores deleniti inventore quaerat mollitia?
         </p>
-        <form
-          action
+        <Form
           className="mt-6 mb-0 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
         >
           <p className="text-center text-lg font-medium">
@@ -23,8 +27,9 @@ const Login = () => {
               Email
             </label>
             <div className="relative">
-              <input
+              <Input
                 type="email"
+                name="email"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter email"
               />
@@ -51,7 +56,8 @@ const Login = () => {
               Password
             </label>
             <div className="relative">
-              <input
+              <Input
+                name="password"
                 type="password"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter password"
@@ -92,7 +98,7 @@ const Login = () => {
               Sign up
             </a>
           </p>
-        </form>
+        </Form>
       </div>
     </div>
   );
