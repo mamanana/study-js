@@ -1,6 +1,13 @@
 import React from "react";
-import { Form, Input } from 'informed';
+import { Form } from 'informed';
+import Input from '@/components/Input'
 import { useLogin } from "@/talons/Customer/useLogin";
+
+const validate = (value: string) => {
+  console.log('run');
+  console.log(value)
+  if (value && !value.includes('!')) return 'Field must contain a "!"';
+};
 
 const Login = () => {
 
@@ -28,10 +35,12 @@ const Login = () => {
             </label>
             <div className="relative">
               <Input
-                type="email"
+                type="text"
                 name="email"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter email"
+                required
+                validate={validate}
               />
               <span className="absolute inset-y-0 right-0 grid place-content-center px-4">
                 <svg
