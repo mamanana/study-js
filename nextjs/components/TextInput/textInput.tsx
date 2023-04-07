@@ -2,23 +2,24 @@ import { Fragment } from "react";
 import { useField } from "informed";
 
 const TextInput = (props) => {
-  const { fieldType, ...restProps } = props;
+  const { type, ...restProps } = props;
+  console.log(type)
   const { render, informed, userProps, fieldState, ref } = useField({
     type: "text",
-    ...props,
+    ...restProps,
   });
-  const { type, label, id, ...rest } = userProps;
+  const { id, style, ...rest } = userProps;
   const { showError, error } = fieldState;
-  const style = showError ? { border: "solid 1px red" } : null;
+  const errorStyle = showError ? { border: "solid 1px red" } : {};
   return render(
     <Fragment>
       <input
         id={id}
-        type={fieldType}
-        ref={ref}
         {...rest}
+        type={type}
+        ref={ref}
         {...informed}
-        style={style}
+        style={{...style, ...errorStyle}}
       />
       {showError && <small style={{ color: "red" }}>{error}</small>}
     </Fragment>
@@ -26,7 +27,8 @@ const TextInput = (props) => {
 };
 
 TextInput.defaultProps = {
-  fieldType: "text",
+  type: "text",
+  style: {}
 };
 
 export default TextInput;

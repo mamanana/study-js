@@ -35,7 +35,8 @@ builder.mutationField("signup", (t) =>
       name: t.arg.string({ required: true }),
       password: t.arg.string({ required: true }),
     },
-    resolve: async (parent, args) => {
+    resolve: async (parent, args, ctx) => {
+      const { cookie } = ctx
       const password = await bcrypt.hash(args.password, 10);
 
       const user = await prisma.user.create({
@@ -43,6 +44,16 @@ builder.mutationField("signup", (t) =>
       });
 
       const token = jwt.sign({ userId: user.id }, APP_SECRET);
+
+      // the password is correct, set a cookie on the response
+      cookie('auth', token, {
+        // cookie is valid for all subpaths of my domain
+        path: '/',
+        // this cookie won't be readable by the browser
+        httpOnly: true,
+        // and won't be usable outside of my domain
+        sameSite: 'strict',
+      })
       // console.log(args)
       return {
         token,
@@ -59,7 +70,8 @@ builder.mutationField("login", (t) =>
       email: t.arg.string({ required: true }),
       password: t.arg.string({ required: true }),
     },
-    resolve: async (parent, args) => {
+    resolve: async (parent, args, context) => {
+      console.log(context)
       const user = await prisma.user.findUnique({
         where: { email: args.email },
       });

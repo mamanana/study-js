@@ -1,13 +1,16 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { createYoga } from 'graphql-yoga'
+import cookies from '@/untils/cookieHelper'
 import { schema } from '../../graphql/schema'
+import context from '../../graphql/context'
 
-export default createYoga<{
+const handler = createYoga<{
   req: NextApiRequest
   res: NextApiResponse
 }>({
   schema,
+  context,
   graphqlEndpoint: '/api/graphql'
 })
 
@@ -16,3 +19,5 @@ export const config = {
     bodyParser: false
   }
 }
+
+export default cookies(handler)

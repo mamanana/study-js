@@ -13,6 +13,10 @@ const Login = () => {
 
   const talonProps = useLogin()
 
+  const {
+    handleSubmit
+  } = talonProps
+
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-lg">
@@ -25,6 +29,7 @@ const Login = () => {
         </p>
         <Form
           className="mt-6 mb-0 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
+          onSubmit={handleSubmit}
         >
           <p className="text-center text-lg font-medium">
             Sign in to your account
@@ -67,10 +72,10 @@ const Login = () => {
             <div className="relative">
               <Input
                 name="password"
-                fieldType="password"
-                // type="password"
+                type="password"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter password"
+                required
               />
               <span className="absolute inset-y-0 right-0 grid place-content-center px-4">
                 <svg

@@ -1,5 +1,5 @@
-mutation customerLogin($email: String!, $passowrd: String!){
-  login(email: $email, password: $passowrd) {
+mutation customerLogin($email: String!, $password: String!){
+  login(email: $email, password: $password) {
     token
     user {
       id
