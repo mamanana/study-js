@@ -1,26 +1,33 @@
 import { Fragment } from "react";
 import { useField } from "informed";
 
-const TextInput = (props) => {
+const TextInput = (props: any) => {
   const { type, ...restProps } = props;
-  console.log(type)
   const { render, informed, userProps, fieldState, ref } = useField({
     type: "text",
     ...restProps,
   });
-  const { id, style, ...rest } = userProps;
+  const { id, style, icon, ...rest } = userProps;
   const { showError, error } = fieldState;
   const errorStyle = showError ? { border: "solid 1px red" } : {};
   return render(
     <Fragment>
-      <input
-        id={id}
-        {...rest}
-        type={type}
-        ref={ref}
-        {...informed}
-        style={{...style, ...errorStyle}}
-      />
+      <div className="relative">
+        <input
+          id={id}
+          {...rest}
+          type={type}
+          ref={ref}
+          {...informed}
+          style={{ ...style, ...errorStyle }}
+        />
+        {icon ? (
+          <span className="absolute inset-y-0 right-0 grid place-content-center px-4">
+            {icon}
+          </span>
+        ) : null}
+      </div>
+
       {showError && <small style={{ color: "red" }}>{error}</small>}
     </Fragment>
   );
@@ -28,7 +35,7 @@ const TextInput = (props) => {
 
 TextInput.defaultProps = {
   type: "text",
-  style: {}
+  style: {},
 };
 
 export default TextInput;

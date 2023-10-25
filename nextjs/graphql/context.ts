@@ -1,22 +1,31 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 const APP_SECRET = "GraphQL-is-aw3some";
 
-function getTokenPayload(token: string)  {
+function getTokenPayload(token) {
   return jwt.verify(token, APP_SECRET);
 }
 
 function isAuthenticated(req) {
   // I use a cookie called 'session'
-  const { session } = req?.cookies
+  const { token } = req?.cookies;
 
   // Cryptr requires a minimum length of 32 for any signing
-  if (!session || session.length < 32) {
-    return false
+  if (token) {
+    const userId = getTokenPayload(token);
+
+    if(userId) {
+      return {
+        isLogin: true,
+        userId,
+      };
+    }
   }
 
-  return true
+  return {
+    isLogin: false,
+  };
 }
 
 export default async function createContext({
@@ -26,12 +35,11 @@ export default async function createContext({
   req: NextApiRequest;
   res: NextApiResponse;
 }) {
-  console.log(res);
+  const authorization = isAuthenticated(req)
   return {
     // expose the cookie helper in the GraphQL context object
-   
     cookie: res.cookie,
-    // allow queries and mutations to look for an `isMe` boolean in the context object
-    isMe: isAuthenticated(req),
-  }
+    // allow queries and mutations to look for an `isLogin` boolean in the context object
+    ...authorization
+  };
 }

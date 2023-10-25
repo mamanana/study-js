@@ -28,4 +28,5 @@ builder.queryType({
     }),
   }),
 });
+
 builder.mutationType({});
