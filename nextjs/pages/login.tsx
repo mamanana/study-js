@@ -3,6 +3,8 @@ import { Form } from "informed";
 import { useLogin } from "@/talons/Customer/useLogin";
 import { Email as EmailIcon } from "@/components/Icons/Email";
 import { Password as PasswordIcon } from "@/components/Icons/Password";
+import { isRequired, validateEmail } from '@/untils/formValidators'
+import combine from '@/untils/combineValidators'
 import Input from "@/components/TextInput";
 import Link from "next/link";
 
@@ -38,6 +40,7 @@ const Login = () => {
                 name="email"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter email"
+                validate={combine([isRequired, validateEmail])}
                 required
                 icon={<EmailIcon />}
               />

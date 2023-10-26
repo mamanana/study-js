@@ -50,7 +50,7 @@ const Register = () => {
             <div>
               <Input
                 type="text"
-                name="email"
+                name="firtname"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter email"
                 required
@@ -65,9 +65,9 @@ const Register = () => {
             <div>
               <Input
                 type="text"
-                name="email"
+                name="lastname"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
-                placeholder="Enter email"
+                placeholder="Enter Lastname"
                 required
                 icon={<EmailIcon />}
               />
@@ -94,8 +94,8 @@ const Register = () => {
             </label>
             <div>
               <Input
-                name="password"
-                type="password"
+                name="repassword"
+                type="repassword"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter password"
                 icon={<PasswordIcon />}
