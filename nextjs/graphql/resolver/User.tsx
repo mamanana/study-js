@@ -29,7 +29,7 @@ const removeCookieToken = (cookie) => {
   });
 };
 
-export const signup = async (parent, args, ctx) => {
+export const register = async (parent, args, ctx) => {
   const { cookie } = ctx;
   const password = await bcrypt.hash(args.password, 10);
 

@@ -168,10 +168,7 @@ export const validatePassword = value => {
   }
 
   if (Object.values(count).filter(Boolean).length < 3) {
-    const message = {
-      id: 'validation.validatePassword',
-      defaultMessage: 'A password must contain at least 3 of the following: lowercase, uppercase, digits, special characters.',
-    };
+    const message = 'A password must contain at least 3 of the following: lowercase, uppercase, digits, special characters.'
     return message;
   }
 
@@ -197,10 +194,6 @@ export const isNotEqualToField = (value, values, fieldKey) => {
 };
 
 export const validConfirmPassword = (value, values, fieldKey) => {
-    const message = {
-      id: 'validation.validConfirmPassword',
-      defaultMessage: 'Passwords do not match',
-      value: fieldKey,
-    };
+    const message = 'Password not match';
     return value === values[fieldKey] ? SUCCESS : message;
   };

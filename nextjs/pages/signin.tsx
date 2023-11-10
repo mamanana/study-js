@@ -3,10 +3,11 @@ import { Form } from "informed";
 import { useLogin } from "@/talons/Customer/useLogin";
 import { Email as EmailIcon } from "@/components/Icons/Email";
 import { Password as PasswordIcon } from "@/components/Icons/Password";
+import { validateEmail } from '@/untils/formValidators'
 import Input from "@/components/TextInput";
 import Link from "next/link";
 
-const Register = () => {
+const SignIn = () => {
   const talonProps = useLogin();
 
   const { handleSubmit } = talonProps;
@@ -38,36 +39,7 @@ const Register = () => {
                 name="email"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter email"
-                required
-                icon={<EmailIcon />}
-              />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="email" className="sr-only">
-              Firstname
-            </label>
-            <div>
-              <Input
-                type="text"
-                name="firtname"
-                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
-                placeholder="Enter email"
-                required
-                icon={<EmailIcon />}
-              />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="email" className="sr-only">
-              Lastname
-            </label>
-            <div>
-              <Input
-                type="text"
-                name="lastname"
-                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
-                placeholder="Enter Lastname"
+                validate={validateEmail}
                 required
                 icon={<EmailIcon />}
               />
@@ -88,21 +60,6 @@ const Register = () => {
               />
             </div>
           </div>
-          <div>
-            <label htmlFor="password" className="sr-only">
-              Repassword
-            </label>
-            <div>
-              <Input
-                name="repassword"
-                type="repassword"
-                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
-                placeholder="Enter password"
-                icon={<PasswordIcon />}
-                required
-              />
-            </div>
-          </div>
           <button
             type="submit"
             className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
@@ -111,7 +68,7 @@ const Register = () => {
           </button>
           <p className="text-center text-sm text-gray-500">
             No account?
-            <Link href="/register">Sign up</Link>
+            <Link href="/register" className="underline">Sign up</Link>
           </p>
         </Form>
       </div>
@@ -119,4 +76,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default SignIn;

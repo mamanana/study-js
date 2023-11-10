@@ -1,5 +1,5 @@
 import { builder } from "../builder";
-import {login, logout, signup} from "../resolver/User"
+import {login, logout, register} from "../resolver/User"
 
 builder.prismaObject("User", {
   fields: (t) => ({
@@ -23,7 +23,7 @@ const AuthPayload = builder.simpleObject("AuthPayload", {
   }),
 });
 
-builder.mutationField("signup", (t) =>
+builder.mutationField("register", (t) =>
   t.field({
     type: AuthPayload,
     args: {
@@ -31,7 +31,7 @@ builder.mutationField("signup", (t) =>
       name: t.arg.string({ required: true }),
       password: t.arg.string({ required: true }),
     },
-    resolve: signup,
+    resolve: register,
   })
 );
 
