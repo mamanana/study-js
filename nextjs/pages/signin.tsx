@@ -68,7 +68,7 @@ const SignIn = () => {
           </button>
           <p className="text-center text-sm text-gray-500">
             No account?
-            <Link href="/register" className="underline">Sign up</Link>
+            <Link href="/signup" className="underline">Sign up</Link>
           </p>
         </Form>
       </div>

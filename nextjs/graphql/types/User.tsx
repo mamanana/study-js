@@ -5,7 +5,8 @@ builder.prismaObject("User", {
   fields: (t) => ({
     id: t.exposeID("id"),
     email: t.exposeString("email"),
-    name: t.exposeString("name"),
+    firstname: t.exposeString("firstname"),
+    lastname: t.exposeString("lastname"),
     createdAt: t.expose("createdAt", {
       type: "Date",
     }),
@@ -28,7 +29,8 @@ builder.mutationField("register", (t) =>
     type: AuthPayload,
     args: {
       email: t.arg.string({ required: true }),
-      name: t.arg.string({ required: true }),
+      firstname: t.arg.string({ required: true }),
+      lastname: t.arg.string({ required: true }),
       password: t.arg.string({ required: true }),
     },
     resolve: register,

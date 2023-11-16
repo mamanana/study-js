@@ -1,0 +1,12 @@
+mutation register($email: String!, $firstname: String!, $lastname: String!, $password: String!){
+  register(email: $email, firstname: $firstname, lastname: $lastname, password: $password) {
+    token
+    user {
+      id
+      email
+      firstname
+      lastname
+      createdAt
+    }
+  }
+}

@@ -4,7 +4,8 @@ mutation login($email: String!, $password: String!){
     user {
       id
       email
-      name
+      firstname
+      lastname
       createdAt
     }
   }

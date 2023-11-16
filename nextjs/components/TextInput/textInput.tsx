@@ -14,7 +14,6 @@ const TextInput = (props: any) => {
     <Fragment>
       <div className="relative">
         <input
-          id={id}
           {...rest}
           type={type}
           ref={ref}

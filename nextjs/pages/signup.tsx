@@ -1,12 +1,9 @@
 import React from "react";
 import { Form } from "informed";
-import { useLogin } from "@/talons/Customer/useLogin";
-import { Email as EmailIcon } from "@/components/Icons/Email";
-import { Password as PasswordIcon } from "@/components/Icons/Password";
-import { validConfirmPassword, validatePassword } from '@/untils/formValidators'
+import { useLogin } from "@/talons/Customer/useRegister";
+import { validConfirmPassword, validatePassword, validateEmail } from '@/untils/formValidators'
 import combine from '@/untils/combineValidators'
 import Input from "@/components/TextInput";
-import Link from "next/link";
 
 const Register = () => {
   const talonProps = useLogin();
@@ -41,7 +38,7 @@ const Register = () => {
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter email"
                 required
-                icon={<EmailIcon />}
+                validate={validateEmail}
               />
             </div>
           </div>
@@ -52,11 +49,10 @@ const Register = () => {
             <div>
               <Input
                 type="text"
-                name="firtname"
+                name="firstname"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
-                placeholder="Enter email"
+                placeholder="Enter firstname"
                 required
-                icon={<EmailIcon />}
               />
             </div>
           </div>
@@ -69,9 +65,8 @@ const Register = () => {
                 type="text"
                 name="lastname"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
-                placeholder="Enter Lastname"
+                placeholder="Enter lastname"
                 required
-                icon={<EmailIcon />}
               />
             </div>
           </div>
@@ -85,7 +80,6 @@ const Register = () => {
                 type="password"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter password"
-                icon={<PasswordIcon />}
                 validate={validatePassword}
                 required
               />
@@ -98,12 +92,11 @@ const Register = () => {
             <div>
               <Input
                 name="repassword"
-                type="repassword"
+                type="password"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
-                placeholder="Enter password"
-                icon={<PasswordIcon />}
+                placeholder="Reenter password"
                 required
-                validate={combine([validConfirmPassword, 'password'])}
+                validate={combine([[validConfirmPassword, 'password']])}
               />
             </div>
           </div>
@@ -111,12 +104,8 @@ const Register = () => {
             type="submit"
             className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
           >
-            Sign in
+            Sign up
           </button>
-          <p className="text-center text-sm text-gray-500">
-            No account?
-            <Link href="/register">Sign up</Link>
-          </p>
         </Form>
       </div>
     </div>

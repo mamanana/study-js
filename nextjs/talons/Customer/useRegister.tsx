@@ -1,9 +1,9 @@
 import { useMutation } from "@apollo/client"
-import LoginQuery from '@/queries/Customer/login.graphql'
+import RegisterQuery from '@/queries/Customer/register.graphql'
 
 export const useLogin = () => {
 
-    const [login, {data, loading, error}] = useMutation(LoginQuery)
+    const [register, {data, loading, error}] = useMutation(RegisterQuery)
 
     const handleSubmit = async ({values}) => {
         
@@ -11,7 +11,7 @@ export const useLogin = () => {
             ...values
         }
 
-        const loginData = await login({ variables })
+        const loginData = await register({ variables })
 
         console.log(loginData)
 

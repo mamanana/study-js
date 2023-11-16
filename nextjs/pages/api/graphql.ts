@@ -20,4 +20,4 @@ export const config = {
   }
 }
 
-export default cookies(handler)
+export default handler

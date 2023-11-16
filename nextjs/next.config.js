@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const withNextIntl = require('next-intl/plugin')('./i18n.tsx');
+const nextConfig = withNextIntl({
   reactStrictMode: true,
   webpack: (config, options) => {
     config.module.rules.push({
@@ -13,6 +14,6 @@ const nextConfig = {
   env: {
     BASE_URL: process.env.BASE_URL
   }
-}
+})
 
 module.exports = nextConfig

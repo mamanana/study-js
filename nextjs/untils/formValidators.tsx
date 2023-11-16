@@ -153,6 +153,7 @@ export const validateRegionCode = (value, values, countries) => {
 };
 
 export const validatePassword = value => {
+  console.log('run 12')
   const count = {
     lower: 0,
     upper: 0,
@@ -194,6 +195,8 @@ export const isNotEqualToField = (value, values, fieldKey) => {
 };
 
 export const validConfirmPassword = (value, values, fieldKey) => {
+  console.log(values)
+    console.log(fieldKey)
     const message = 'Password not match';
     return value === values[fieldKey] ? SUCCESS : message;
-  };
+};
