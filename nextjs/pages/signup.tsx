@@ -1,12 +1,12 @@
 import React from "react";
 import { Form } from "informed";
-import { useLogin } from "@/talons/Customer/useRegister";
+import { useRegister } from "@/talons/Customer/useRegister";
 import { validConfirmPassword, validatePassword, validateEmail } from '@/untils/formValidators'
 import combine from '@/untils/combineValidators'
 import Input from "@/components/TextInput";
 
 const Register = () => {
-  const talonProps = useLogin();
+  const talonProps = useRegister();
 
   const { handleSubmit } = talonProps;
 

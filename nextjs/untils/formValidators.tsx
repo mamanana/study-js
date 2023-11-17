@@ -27,6 +27,7 @@ export const validateEmpty = value => {
   }
   return true;
 };
+
 export const validateTelephone = value => {
   let validRegexp = /^[0-9]*$/;
   const message = {
@@ -39,6 +40,7 @@ export const validateTelephone = value => {
   }
   return SUCCESS;
 };
+
 export const validateNewPassword = (value, values, fieldKey) => {
   const message = {
     id: 'validation.validateNewPassword',
@@ -195,8 +197,6 @@ export const isNotEqualToField = (value, values, fieldKey) => {
 };
 
 export const validConfirmPassword = (value, values, fieldKey) => {
-  console.log(values)
-    console.log(fieldKey)
     const message = 'Password not match';
     return value === values[fieldKey] ? SUCCESS : message;
 };

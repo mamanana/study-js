@@ -33,11 +33,19 @@ export const register = async (parent, args, ctx) => {
   const { cookie } = ctx;
   const password = await bcrypt.hash(args.password, 10);
 
-  const user = await prisma.user.create({
+  const user = await prisma.user.findUnique({
+    where: { email: args.email },
+  });
+
+  if(!!user) {
+    throw new Error("There is already an account with this email address")
+  }
+
+  const newUser = await prisma.user.create({
     data: { ...args, password },
   });
 
-  const token = jwt.sign({ userId: user.id }, APP_SECRET);
+  const token = jwt.sign({ userId: newUser.id }, APP_SECRET);
 
   setCookieToken(cookie, token);
 

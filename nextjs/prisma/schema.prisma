@@ -17,7 +17,7 @@ generator pothos {
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   email     String   @unique
-  firtname  String
+  firstname  String
   lastname  String
   password  String
   createdAt DateTime @default(now())
