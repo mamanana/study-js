@@ -1,3 +1,4 @@
+import { GraphQLError } from 'graphql'
 import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -38,7 +39,7 @@ export const register = async (parent, args, ctx) => {
   });
 
   if(!!user) {
-    throw new Error("There is already an account with this email address")
+    throw new GraphQLError("There is already an account with this email address")
   }
 
   const newUser = await prisma.user.create({
@@ -51,7 +52,7 @@ export const register = async (parent, args, ctx) => {
 
   return {
     token,
-    user,
+    user: newUser,
   };
 };
 
@@ -61,12 +62,12 @@ export const login = async (parent, args, ctx) => {
     where: { email: args.email },
   });
   if (!user) {
-    throw new Error("No such user found");
+    throw new GraphQLError("No such user found");
   }
 
   const valid = await bcrypt.compare(args.password, user.password);
   if (!valid) {
-    throw new Error("Invalid password");
+    throw new GraphQLError("Invalid password");
   }
 
   const token = jwt.sign({ userId: user.id }, APP_SECRET);

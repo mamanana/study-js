@@ -155,7 +155,6 @@ export const validateRegionCode = (value, values, countries) => {
 };
 
 export const validatePassword = value => {
-  console.log('run 12')
   const count = {
     lower: 0,
     upper: 0,

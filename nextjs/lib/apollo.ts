@@ -2,7 +2,9 @@ import {
   ApolloClient,
   createHttpLink,
   InMemoryCache,
+  from
 } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 
 const origin = process.env.BASE_URL
 
@@ -13,8 +15,18 @@ const httpLink = createHttpLink({
   uri: apiBase
 });
 
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
+
 const apolloClient = new ApolloClient({
-  link: httpLink,
+  link: from([errorLink, httpLink]),
   cache: new InMemoryCache(),
 });
 
