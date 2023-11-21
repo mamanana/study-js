@@ -1,13 +1,15 @@
 import { useMutation } from "@apollo/client"
-import { useToast } from "@/talons/Toast/useToast"
+import { useError } from "@/talons/Error/useError"
 import RegisterQuery from '@/queries/Customer/register.graphql'
-import { useEffect } from "react"
 
 export const useRegister = () => {
 
-    const [register, { loading, error }] = useMutation(RegisterQuery)
+    const [register, { loading, called, error }] = useMutation(RegisterQuery)
 
-    const { addToast } = useToast()
+    console.log(error)
+    console.log(called)
+
+    useError({error})
 
     const handleSubmit = async ({values}) => {
         
@@ -20,15 +22,6 @@ export const useRegister = () => {
         
         } catch (e) {
             return;
-        }
-
-
-        // console.log(error)
-
-        // console.log(loginData)
-
-        return {
-
         }
     }
 

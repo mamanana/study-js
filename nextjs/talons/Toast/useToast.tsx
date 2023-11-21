@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 export const useToast = () => {
     
     const addToast = useCallback((toastProps) => {
-        const {type, message, otherProps} = toastProps
+        const {type, message, ...otherProps} = toastProps
         switch(type) {
             case 'success': 
                 toast.success(message, {

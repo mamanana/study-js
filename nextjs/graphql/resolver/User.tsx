@@ -2,7 +2,7 @@ import { GraphQLError } from 'graphql'
 import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-
+import { validateEmail, validateEmpty, validatePassword } from '@/untils/formValidators'
 const APP_SECRET = "GraphQL-is-aw3some";
 
 const cookieOptions = {
@@ -30,8 +30,23 @@ const removeCookieToken = (cookie) => {
   });
 };
 
+const requireFields = {email: [validateEmail, validateEmpty], firstname: [validateEmpty], lastname: [validateEmpty], passowrd: [validateEmpty]};
+
+const validate = (args) => {
+  for(let i in requireFields) {
+    const requireField = requireFields[i];
+    requireField.forEach(func => {
+      const message = func(args[i] || '')
+      if(message) throw new GraphQLError(message)
+    })
+  }
+}
+
 export const register = async (parent, args, ctx) => {
   const { cookie } = ctx;
+
+  validate(args)
+
   const password = await bcrypt.hash(args.password, 10);
 
   const user = await prisma.user.findUnique({
