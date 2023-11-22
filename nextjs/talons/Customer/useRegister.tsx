@@ -1,13 +1,13 @@
 import { useMutation } from "@apollo/client"
 import { useError } from "@/talons/Error/useError"
+import { useUserContext } from '@/context/user'
 import RegisterQuery from '@/queries/Customer/register.graphql'
 
 export const useRegister = () => {
 
-    const [register, { loading, called, error }] = useMutation(RegisterQuery)
+    const [register, { loading, error }] = useMutation(RegisterQuery)
 
-    console.log(error)
-    console.log(called)
+    const [, { setUser }] = useUserContext()
 
     useError({error})
 
@@ -19,6 +19,8 @@ export const useRegister = () => {
 
         try {
             const { data } = await register({ variables })
+            
+            console.log(data)
         
         } catch (e) {
             return;
@@ -26,6 +28,7 @@ export const useRegister = () => {
     }
 
     return {
-        handleSubmit
+        handleSubmit,
+        loading
     }
 }

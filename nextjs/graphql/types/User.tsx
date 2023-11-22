@@ -15,9 +15,6 @@ builder.prismaObject("User", {
 
 const AuthPayload = builder.simpleObject("AuthPayload", {
   fields: (t) => ({
-    token: t.string({
-      nullable: false,
-    }),
     user: t.prismaField({
       type: "User",
     }),

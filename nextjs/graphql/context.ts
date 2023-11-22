@@ -25,6 +25,7 @@ function isAuthenticated(req) {
 
   return {
     isLogin: false,
+    userId: null
   };
 }
 

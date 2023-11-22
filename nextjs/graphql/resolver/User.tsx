@@ -2,7 +2,7 @@ import { GraphQLError } from 'graphql'
 import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { validateEmail, validateEmpty, validatePassword } from '@/untils/formValidators'
+import { validateEmail, isRequired, validatePassword } from '@/untils/formValidators'
 const APP_SECRET = "GraphQL-is-aw3some";
 
 const cookieOptions = {
@@ -30,14 +30,17 @@ const removeCookieToken = (cookie) => {
   });
 };
 
-const requireFields = {email: [validateEmail, validateEmpty], firstname: [validateEmpty], lastname: [validateEmpty], passowrd: [validateEmpty]};
+const requireFields = {email: [validateEmail, isRequired], firstname: [isRequired], lastname: [isRequired], password: [validatePassword, isRequired]};
 
 const validate = (args) => {
   for(let i in requireFields) {
     const requireField = requireFields[i];
     requireField.forEach(func => {
       const message = func(args[i] || '')
-      if(message) throw new GraphQLError(message)
+      if(message) {
+        const label = i.charAt(0).toUpperCase() + i.slice(1);
+        throw new GraphQLError(`${label}: ${message}`)
+      }
     })
   }
 }
@@ -47,27 +50,26 @@ export const register = async (parent, args, ctx) => {
 
   validate(args)
 
-  const password = await bcrypt.hash(args.password, 10);
-
-  const user = await prisma.user.findUnique({
+  const existedUser = await prisma.user.findUnique({
     where: { email: args.email },
   });
 
-  if(!!user) {
+  if(!!existedUser) {
     throw new GraphQLError("There is already an account with this email address")
   }
 
-  const newUser = await prisma.user.create({
+  const password = await bcrypt.hash(args.password, 10);
+
+  const user = await prisma.user.create({
     data: { ...args, password },
   });
 
-  const token = jwt.sign({ userId: newUser.id }, APP_SECRET);
+  const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
   setCookieToken(cookie, token);
 
   return {
-    token,
-    user: newUser,
+    user
   };
 };
 
@@ -76,6 +78,7 @@ export const login = async (parent, args, ctx) => {
   const user = await prisma.user.findUnique({
     where: { email: args.email },
   });
+
   if (!user) {
     throw new GraphQLError("No such user found");
   }
@@ -90,8 +93,7 @@ export const login = async (parent, args, ctx) => {
   setCookieToken(cookie, token);
 
   return {
-    token,
-    user,
+    user
   };
 };
 
