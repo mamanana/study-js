@@ -1,6 +1,6 @@
 import SchemaBuilder from "@pothos/core";
 import PrismaPlugin from "@pothos/plugin-prisma";
-import SimpleObjectsPlugin from '@pothos/plugin-simple-objects';
+import SimpleObjectsPlugin from "@pothos/plugin-simple-objects";
 import type PrismaTypes from "@pothos/plugin-prisma/generated";
 import prisma from "../lib/prisma";
 import { DateResolver } from "graphql-scalars";

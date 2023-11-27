@@ -1,37 +1,33 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useContext, useMemo, useState } from "react";
 
 const UserContext = createContext([]);
 
-const UserContextProvider = props => {
-    const { children } = props;
+const UserContextProvider = (props) => {
+  const { children } = props;
 
-    const [user, setUser] = useState({})
+  const [userState, setUserState] = useState({ isSignedIn: false, user: null });
 
-    const handleSetUser = (value) => {
-        setUser(value)
-    }
+  const handleSetUser = (user) => {
+    setUserState({ isSignedIn: true, user });
+  };
 
-    const userApi = useMemo(
-        () => ({
-            handleSetUser
-        }),
-        [handleSetUser]
-    );
+  const userApi = useMemo(
+    () => ({
+      handleSetUser,
+    }),
+    [handleSetUser],
+  );
 
-    const userState = { user }
+  const contextValue = useMemo(
+    () => [userState, userApi],
+    [userApi, userState],
+  );
 
-    const contextValue = useMemo(() => [userState, userApi], [
-        userApi,
-        userState
-    ]);
-
-    return (
-        <UserContext.Provider value={contextValue}>
-            {children}
-        </UserContext.Provider>
-    );
+  return (
+    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
+  );
 };
 
-export default UserContextProvider
+export default UserContextProvider;
 
 export const useUserContext = () => useContext(UserContext);

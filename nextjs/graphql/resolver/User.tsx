@@ -1,8 +1,13 @@
-import { GraphQLError } from 'graphql'
+import { GraphQLError } from "graphql";
 import prisma from "@/lib/prisma";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { validateEmail, isRequired, validatePassword } from '@/untils/formValidators'
+import { SignJWT } from "jose";
+import { getJwtSecretKey } from "@/untils/auth";
+import {
+  validateEmail,
+  isRequired,
+  validatePassword,
+} from "@/untils/formValidators";
 const APP_SECRET = "GraphQL-is-aw3some";
 
 const cookieOptions = {
@@ -30,32 +35,39 @@ const removeCookieToken = (cookie) => {
   });
 };
 
-const requireFields = {email: [validateEmail, isRequired], firstname: [isRequired], lastname: [isRequired], password: [validatePassword, isRequired]};
+const requireFields = {
+  email: [validateEmail, isRequired],
+  firstname: [isRequired],
+  lastname: [isRequired],
+  password: [validatePassword, isRequired],
+};
 
 const validate = (args) => {
-  for(let i in requireFields) {
+  for (let i in requireFields) {
     const requireField = requireFields[i];
-    requireField.forEach(func => {
-      const message = func(args[i] || '')
-      if(message) {
+    requireField.forEach((func) => {
+      const message = func(args[i] || "");
+      if (message) {
         const label = i.charAt(0).toUpperCase() + i.slice(1);
-        throw new GraphQLError(`${label}: ${message}`)
+        throw new GraphQLError(`${label}: ${message}`);
       }
-    })
+    });
   }
-}
+};
 
 export const register = async (parent, args, ctx) => {
   const { cookie } = ctx;
 
-  validate(args)
+  validate(args);
 
   const existedUser = await prisma.user.findUnique({
     where: { email: args.email },
   });
 
-  if(!!existedUser) {
-    throw new GraphQLError("There is already an account with this email address")
+  if (!!existedUser) {
+    throw new GraphQLError(
+      "There is already an account with this email address",
+    );
   }
 
   const password = await bcrypt.hash(args.password, 10);
@@ -64,12 +76,18 @@ export const register = async (parent, args, ctx) => {
     data: { ...args, password },
   });
 
-  const token = jwt.sign({ userId: user.id }, APP_SECRET);
+  const token = await new SignJWT({
+    userId: user.id,
+  })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("30s")
+    .sign(getJwtSecretKey());
 
   setCookieToken(cookie, token);
 
   return {
-    user
+    user,
   };
 };
 
@@ -88,21 +106,27 @@ export const login = async (parent, args, ctx) => {
     throw new GraphQLError("Invalid password");
   }
 
-  const token = jwt.sign({ userId: user.id }, APP_SECRET);
+  const token = await new SignJWT({
+    userId: user.id,
+  })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("30s")
+    .sign(getJwtSecretKey());
 
   setCookieToken(cookie, token);
 
   return {
-    user
+    user,
   };
 };
 
 export const logout = async (parent, args, ctx) => {
   const { cookie } = ctx;
-  
-  removeCookieToken(cookie)
+
+  removeCookieToken(cookie);
 
   return {
-    status: true
-  }
+    status: true,
+  };
 };

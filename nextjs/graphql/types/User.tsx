@@ -1,5 +1,5 @@
 import { builder } from "../builder";
-import {login, logout, register} from "../resolver/User"
+import { login, logout, register } from "../resolver/User";
 
 builder.prismaObject("User", {
   fields: (t) => ({
@@ -31,7 +31,7 @@ builder.mutationField("register", (t) =>
       password: t.arg.string({ required: true }),
     },
     resolve: register,
-  })
+  }),
 );
 
 builder.mutationField("login", (t) =>
@@ -41,19 +41,19 @@ builder.mutationField("login", (t) =>
       email: t.arg.string({ required: true }),
       password: t.arg.string({ required: true }),
     },
-    resolve: login
-  })
+    resolve: login,
+  }),
 );
 
-const LogoutOutput = builder.simpleObject('LogoutOutput', {
+const LogoutOutput = builder.simpleObject("LogoutOutput", {
   fields: (t) => ({
-    status: t.boolean({})
-  })
-})
+    status: t.boolean({}),
+  }),
+});
 
-builder.mutationField('logout', (t) => 
+builder.mutationField("logout", (t) =>
   t.field({
     type: LogoutOutput,
-    resolve: logout
-  })
-)
+    resolve: logout,
+  }),
+);

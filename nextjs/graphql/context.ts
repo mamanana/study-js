@@ -1,11 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import jwt from "jsonwebtoken";
-
-const APP_SECRET = "GraphQL-is-aw3some";
-
-function getTokenPayload(token) {
-  return jwt.verify(token, APP_SECRET);
-}
+import { getTokenPayload } from "@/untils/auth";
 
 function isAuthenticated(req) {
   // I use a cookie called 'session'
@@ -15,7 +9,7 @@ function isAuthenticated(req) {
   if (token) {
     const userId = getTokenPayload(token);
 
-    if(userId) {
+    if (userId) {
       return {
         isLogin: true,
         userId,
@@ -25,7 +19,7 @@ function isAuthenticated(req) {
 
   return {
     isLogin: false,
-    userId: null
+    userId: null,
   };
 }
 
@@ -36,11 +30,11 @@ export default async function createContext({
   req: NextApiRequest;
   res: NextApiResponse;
 }) {
-  const authorization = isAuthenticated(req)
+  const authorization = isAuthenticated(req);
   return {
     // expose the cookie helper in the GraphQL context object
     cookie: res.cookie,
     // allow queries and mutations to look for an `isLogin` boolean in the context object
-    ...authorization
+    ...authorization,
   };
 }
