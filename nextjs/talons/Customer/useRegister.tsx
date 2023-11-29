@@ -1,38 +1,40 @@
-import { useMutation } from "@apollo/client"
-import { useToast } from "@/talons/Toast/useToast"
-import RegisterQuery from '@/queries/Customer/register.graphql'
-import { useEffect } from "react"
+import { useCallback } from "react";
+import { useMutation } from "@apollo/client";
+import { useError } from "@/talons/Error/useError";
+import { useUserContext } from "@/context/user";
+import { useRouter } from "next/router";
+import RegisterQuery from "@/queries/Customer/register.graphql";
 
 export const useRegister = () => {
+  const [register, { loading, error }] = useMutation(RegisterQuery);
 
-    const [register, { loading, error }] = useMutation(RegisterQuery)
+  const [, { handleSetUser }] = useUserContext();
 
-    const { addToast } = useToast()
+  const router = useRouter();
 
-    const handleSubmit = async ({values}) => {
-        
-        const variables = {
-            ...values
-        }
+  useError({ error });
 
-        try {
-            const { data } = await register({ variables })
-        
-        } catch (e) {
-            return;
-        }
+  const handleSubmit = useCallback(async ({ values }) => {
+    const variables = {
+      ...values,
+    };
 
+    try {
+      const { data } = await register({ variables });
 
-        // console.log(error)
+      const user = data?.register?.user || null;
 
-        // console.log(loginData)
-
-        return {
-
-        }
+      if (user) {
+        handleSetUser(user);
+        router.push("/dashboard");
+      }
+    } catch (e) {
+      return;
     }
+  }, []);
 
-    return {
-        handleSubmit
-    }
-}
+  return {
+    handleSubmit,
+    loading,
+  };
+};

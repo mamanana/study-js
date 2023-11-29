@@ -28,7 +28,7 @@ const TextInput = (props: any) => {
       </div>
 
       {showError && <small style={{ color: "red" }}>{error}</small>}
-    </Fragment>
+    </Fragment>,
   );
 };
 

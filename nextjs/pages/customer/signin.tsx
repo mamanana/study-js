@@ -1,12 +1,14 @@
 import React from "react";
 import { Form } from "informed";
-import { useRegister } from "@/talons/Customer/useRegister";
-import { validConfirmPassword, validatePassword, validateEmail } from '@/untils/formValidators'
-import combine from '@/untils/combineValidators'
+import { useLogin } from "@/talons/Customer/useLogin";
+import { Email as EmailIcon } from "@/components/Icons/Email";
+import { Password as PasswordIcon } from "@/components/Icons/Password";
+import { validateEmail } from "@/untils/formValidators";
 import Input from "@/components/TextInput";
+import Link from "next/link";
 
-const Register = () => {
-  const talonProps = useRegister();
+const SignIn = () => {
+  const talonProps = useLogin();
 
   const { handleSubmit } = talonProps;
 
@@ -37,36 +39,9 @@ const Register = () => {
                 name="email"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter email"
-                required
                 validate={validateEmail}
-              />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="email" className="sr-only">
-              Firstname
-            </label>
-            <div>
-              <Input
-                type="text"
-                name="firstname"
-                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
-                placeholder="Enter firstname"
                 required
-              />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="email" className="sr-only">
-              Lastname
-            </label>
-            <div>
-              <Input
-                type="text"
-                name="lastname"
-                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
-                placeholder="Enter lastname"
-                required
+                icon={<EmailIcon />}
               />
             </div>
           </div>
@@ -80,23 +55,8 @@ const Register = () => {
                 type="password"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter password"
-                validate={validatePassword}
+                icon={<PasswordIcon />}
                 required
-              />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="password" className="sr-only">
-              Repassword
-            </label>
-            <div>
-              <Input
-                name="repassword"
-                type="password"
-                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
-                placeholder="Reenter password"
-                required
-                validate={combine([[validConfirmPassword, 'password']])}
               />
             </div>
           </div>
@@ -104,12 +64,18 @@ const Register = () => {
             type="submit"
             className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
           >
-            Sign up
+            Sign in
           </button>
+          <p className="text-center text-sm text-gray-500">
+            No account?
+            <Link href="/signup" className="underline">
+              Sign up
+            </Link>
+          </p>
         </Form>
       </div>
     </div>
   );
 };
 
-export default Register;
+export default SignIn;

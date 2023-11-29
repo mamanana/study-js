@@ -1,14 +1,16 @@
 import React from "react";
 import { Form } from "informed";
-import { useLogin } from "@/talons/Customer/useLogin";
-import { Email as EmailIcon } from "@/components/Icons/Email";
-import { Password as PasswordIcon } from "@/components/Icons/Password";
-import { validateEmail } from '@/untils/formValidators'
+import { useRegister } from "@/talons/Customer/useRegister";
+import {
+  validConfirmPassword,
+  validatePassword,
+  validateEmail,
+} from "@/untils/formValidators";
+import combine from "@/untils/combineValidators";
 import Input from "@/components/TextInput";
-import Link from "next/link";
 
-const SignIn = () => {
-  const talonProps = useLogin();
+const Register = () => {
+  const talonProps = useRegister();
 
   const { handleSubmit } = talonProps;
 
@@ -39,9 +41,36 @@ const SignIn = () => {
                 name="email"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter email"
-                validate={validateEmail}
                 required
-                icon={<EmailIcon />}
+                validate={validateEmail}
+              />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="email" className="sr-only">
+              Firstname
+            </label>
+            <div>
+              <Input
+                type="text"
+                name="firstname"
+                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                placeholder="Enter firstname"
+                required
+              />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="email" className="sr-only">
+              Lastname
+            </label>
+            <div>
+              <Input
+                type="text"
+                name="lastname"
+                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                placeholder="Enter lastname"
+                required
               />
             </div>
           </div>
@@ -55,8 +84,23 @@ const SignIn = () => {
                 type="password"
                 className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                 placeholder="Enter password"
-                icon={<PasswordIcon />}
+                validate={validatePassword}
                 required
+              />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="password" className="sr-only">
+              Repassword
+            </label>
+            <div>
+              <Input
+                name="repassword"
+                type="password"
+                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                placeholder="Reenter password"
+                required
+                validate={combine([[validConfirmPassword, "password"]])}
               />
             </div>
           </div>
@@ -64,16 +108,12 @@ const SignIn = () => {
             type="submit"
             className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
           >
-            Sign in
+            Sign up
           </button>
-          <p className="text-center text-sm text-gray-500">
-            No account?
-            <Link href="/signup" className="underline">Sign up</Link>
-          </p>
         </Form>
       </div>
     </div>
   );
 };
 
-export default SignIn;
+export default Register;
