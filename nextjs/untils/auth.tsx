@@ -1,7 +1,7 @@
 import { jwtVerify } from "jose";
 
 export function getJwtSecretKey() {
-  const secret = process.env.APP_SECRET;
+  const secret = 'GraphQL-is-aw3some';
   if (!secret) {
     throw new Error("JWT Secret key is not matched");
   }

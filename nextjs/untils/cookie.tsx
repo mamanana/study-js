@@ -1,26 +1,25 @@
+import type { NextApiResponse } from "next";
 import { serialize } from "cookie";
 
 /**
  * This sets `cookie` on `res` object
  */
-const cookie = (res, name, value, options = {}) => {
+export const cookie = (
+  res: NextApiResponse,
+  name: string,
+  value: string,
+  options: { expires?: Date; maxAge?: number } = {},
+) => {
   const stringValue =
     typeof value === "object" ? "j:" + JSON.stringify(value) : String(value);
 
-  if ("maxAge" in options) {
-    options.expires = new Date(Date.now() + options.maxAge);
+  const cookieOption = { ...options };
+  if ("maxAge" in cookieOption) {
+    cookieOption.expires = new Date(Date.now() + (cookieOption?.maxAge || 0));
   }
 
-  res.setHeader("Set-Cookie", serialize(name, String(stringValue), options));
+  res.setHeader(
+    "Set-Cookie",
+    serialize(name, String(stringValue), cookieOption),
+  );
 };
-
-/**
- * Adds `cookie` function on `res.cookie` to set cookies for response
- */
-const cookies = (handler) => (req, res) => {
-  res.cookie = (name, value, options) => cookie(res, name, value, options);
-
-  return handler(req, res);
-};
-
-export default cookies;

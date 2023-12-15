@@ -1,6 +1,6 @@
+import type { NextApiResponse } from "next";
+
 import { GraphQLError } from "graphql";
-import prisma from "@/lib/prisma";
-import bcrypt from "bcryptjs";
 import { SignJWT } from "jose";
 import { getJwtSecretKey } from "@/untils/auth";
 import {
@@ -8,7 +8,9 @@ import {
   isRequired,
   validatePassword,
 } from "@/untils/formValidators";
-const APP_SECRET = "GraphQL-is-aw3some";
+import { cookie } from "@/untils/cookie";
+import prisma from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
 const cookieOptions = {
   // cookie is valid for all subpaths of my domain
@@ -19,16 +21,16 @@ const cookieOptions = {
   sameSite: "strict",
 };
 
-const setCookieToken = (cookie, token) => {
-  cookie("token", token, {
+const setCookieToken = (res: NextApiResponse, token: string) => {
+  cookie(res, "token", token, {
     ...cookieOptions,
     // set time cookies will be delete
     maxAge: 60 * 60 * 24,
   });
 };
 
-const removeCookieToken = (cookie) => {
-  cookie("token", "", {
+const removeCookieToken = (res: NextApiResponse) => {
+  cookie(res, "token", "", {
     ...cookieOptions,
     // set time cookies will be delete
     maxAge: 0,
@@ -55,7 +57,7 @@ const validate = (args) => {
   }
 };
 
-export const register = async (parent, args, ctx) => {
+export const register = async<Types extends SchemaTypes>(parent: PothosSchemaTypes.ParentShape, args, ctx: Context) => {
   const { cookie } = ctx;
 
   validate(args);
@@ -81,7 +83,7 @@ export const register = async (parent, args, ctx) => {
   })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("30s")
+    .setExpirationTime("24h")
     .sign(getJwtSecretKey());
 
   setCookieToken(cookie, token);
@@ -92,7 +94,7 @@ export const register = async (parent, args, ctx) => {
 };
 
 export const login = async (parent, args, ctx) => {
-  const { cookie } = ctx;
+  const { res } = ctx;
   const user = await prisma.user.findUnique({
     where: { email: args.email },
   });
@@ -111,10 +113,10 @@ export const login = async (parent, args, ctx) => {
   })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("30s")
+    .setExpirationTime("24h")
     .sign(getJwtSecretKey());
 
-  setCookieToken(cookie, token);
+  setCookieToken(res, token);
 
   return {
     user,
@@ -122,9 +124,9 @@ export const login = async (parent, args, ctx) => {
 };
 
 export const logout = async (parent, args, ctx) => {
-  const { cookie } = ctx;
+  const { res } = ctx;
 
-  removeCookieToken(cookie);
+  removeCookieToken(res);
 
   return {
     status: true,

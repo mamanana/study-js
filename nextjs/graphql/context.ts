@@ -1,13 +1,13 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getTokenPayload } from "@/untils/auth";
+import type { NextApiRequest } from "next";
+import { verifyJwtToken } from "@/untils/auth";
 
-function isAuthenticated(req) {
+async function isAuthenticated(req: NextApiRequest) {
   // I use a cookie called 'session'
   const { token } = req?.cookies;
 
   // Cryptr requires a minimum length of 32 for any signing
   if (token) {
-    const userId = getTokenPayload(token);
+    const userId = await verifyJwtToken(token);
 
     if (userId) {
       return {
@@ -24,17 +24,12 @@ function isAuthenticated(req) {
 }
 
 export default async function createContext({
-  req,
-  res,
+  req
 }: {
   req: NextApiRequest;
-  res: NextApiResponse;
 }) {
-  const authorization = isAuthenticated(req);
+  const authorization = await isAuthenticated(req);
   return {
-    // expose the cookie helper in the GraphQL context object
-    cookie: res.cookie,
-    // allow queries and mutations to look for an `isLogin` boolean in the context object
     ...authorization,
   };
 }

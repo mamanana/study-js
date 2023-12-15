@@ -1,13 +1,20 @@
 import React, { createContext, useContext, useMemo, useState } from "react";
+declare type User = {
+  id: string,
+  email: string,
+  firstname: string,
+  lastname: string,
+  createdAt: string
+}
 
-const UserContext = createContext([]);
+const UserContext = createContext([{}, {}]);
 
-const UserContextProvider = (props) => {
+const UserContextProvider = (props: any ) => {
   const { children } = props;
 
-  const [userState, setUserState] = useState({ isSignedIn: false, user: null });
+  const [userState, setUserState] = useState({});
 
-  const handleSetUser = (user) => {
+  const handleSetUser = (user: User) => {
     setUserState({ isSignedIn: true, user });
   };
 
