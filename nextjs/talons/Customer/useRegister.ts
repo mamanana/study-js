@@ -14,24 +14,36 @@ export const useRegister = () => {
 
   useError({ error });
 
-  const handleSubmit = useCallback(async ({ values }) => {
-    const variables = {
-      ...values,
-    };
+  const handleSubmit = useCallback(
+    async ({
+      values,
+    }: {
+      values: {
+        email: string;
+        fistname: string;
+        lastname: string;
+        password: string;
+      };
+    }) => {
+      const variables = {
+        ...values,
+      };
 
-    try {
-      const { data } = await register({ variables });
+      try {
+        const { data } = await register({ variables });
 
-      const user = data?.register?.user || null;
+        const user = data?.register?.user || null;
 
-      if (user) {
-        handleSetUser(user);
-        router.push("/dashboard");
+        if (user) {
+          handleSetUser(user);
+          router.push("/dashboard");
+        }
+      } catch (e) {
+        return;
       }
-    } catch (e) {
-      return;
-    }
-  }, []);
+    },
+    [],
+  );
 
   return {
     handleSubmit,

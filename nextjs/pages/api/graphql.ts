@@ -3,9 +3,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { createYoga } from "graphql-yoga";
 import { schema } from "@/graphql/schema";
 import context from "@/graphql/context";
-import cookies from "@/untils/cookie";
 
-const handler = createYoga<{
+export default createYoga<{
   req: NextApiRequest;
   res: NextApiResponse;
 }>({
@@ -19,5 +18,3 @@ export const config = {
     bodyParser: false,
   },
 };
-
-export default cookies(handler);
