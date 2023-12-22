@@ -148,7 +148,7 @@ export async function uploadFile(file: File) {
     }
 }
 
-export async function getFileReview(fileId: string) {
+export function getFileReview(fileId: string) {
     try {
         const fileUrl = storage.getFilePreview(
             appwriteConfig.storageId,
@@ -179,10 +179,67 @@ export async function getRecentPosts() {
     const posts = await databases.listDocuments(
         appwriteConfig.databaseId,
         appwriteConfig.postCollectionId,
-        [Query.orderDesc('$createAt'), Query.limit(20)]
+        [Query.orderDesc('$createdAt'), Query.limit(20)]
     )
 
     if(!posts) throw Error;
     
     return posts
+}
+
+export async function likePost(postId: string, likeArray: string[]) {
+    try {   
+        const updatedPost = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            postId,
+            {
+                likes: likeArray,
+                
+            }
+        )
+
+        if(!updatedPost) throw Error
+
+        return updatedPost
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export async function savePost(postId: string, userId: string) {
+    try {   
+        const updatedPost = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.savesCollectionId,
+            ID.unique(),
+            {
+                user: userId,
+                post: postId
+                
+            }
+        )
+
+        if(!updatedPost) throw Error
+
+        return updatedPost
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export async function deleteSavedPost(savedRecordId: string) {
+    try {   
+        const statusCode = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.savesCollectionId,
+            savedRecordId
+        )   
+
+        if(!statusCode) throw Error
+
+        return statusCode
+    } catch (e) {
+        console.log(e)
+    }
 }
