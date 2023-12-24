@@ -5,6 +5,7 @@ import { useUserContext } from "@/context/AuthContext";
 import { sidebarLinks } from "@/constants";
 import { INavLink } from "@/type";
 import { Button } from "../ui/button";
+
 const LeftSidebar = () => {
   const { pathname } = useLocation();
   const { mutate: signOut, isSuccess } = useSignOutAccount();
@@ -45,7 +46,7 @@ const LeftSidebar = () => {
               <li
                 key={link.label}
                 className={`leftsidebar-link group ${
-                  isActive && "bg-primary-500"
+                  isActive ? "bg-primary-500" : ''
                 }`}
               >
                 <NavLink
