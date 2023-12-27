@@ -19,9 +19,13 @@ import {
   signInAccount,
   signOutAccount,
   updatePost,
+  getUsers,
+  getUserById,
+  updateUser
 } from "../appwrite/api";
-import { INewPost, INewUser, IUpdatePost } from "@/type";
+import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/type";
 import { QUERY_KEYS } from "./queryKeys";
+import { Models } from "appwrite";
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -131,6 +135,21 @@ export const useGetCurrentUser = () => {
   });
 };
 
+export const useGetUsers = (limit?: number) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USERS],
+    queryFn: () => getUsers(limit),
+  });
+};
+
+export const useGetUserById = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
+    queryFn: () => getUserById(userId),
+    enabled: !!userId,
+  });
+};
+
 export const useGetPostById = (postId: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_POST_BY_ID, postId],
@@ -170,7 +189,7 @@ export const useGetPosts = () => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
     queryFn: getInfinitePosts,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: Models.DocumentList<Models.Document>) => {
       if(lastPage && lastPage.documents.length === 0) return null
 
       const  lastId = lastPage?.documents[lastPage?.documents.length - 1].$id
@@ -187,3 +206,18 @@ export const useSearchPosts = (searchTerm: string) => {
     enabled: !!searchTerm
   })
 }
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (user: IUpdateUser) => updateUser(user),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id],
+      });
+    },
+  });
+};
